@@ -1,0 +1,26 @@
+{
+	"Menu": {
+		"applyingForServiceTextText": "Applying",
+		"buttonBankButtonText": "Opening bank accounts",
+		"buttonMobileButtonText": "Best mobile subscription"
+	},
+	"Form": {
+		"titleTextText": "Please fill in your details for us to apply for you",
+		"cityTextInputText": "City",
+		"postcodeTextInputText": "Postcode",
+		"addressTextInputText": "Address",
+		"emailTextInputText": "Email",
+		"phonenumberTextInputText": "Phone Number",
+		"taxnumberTextInputText": "Tax Number",
+		"familynameTextInputText": "Family Name",
+		"firstnameTextInputText": "First Name",
+		"buttonNextButtonText": "Next"
+	},
+	"Finish": {
+		"buttonFinishButtonText": "Finish",
+		"yourApplicationIsTextText": "Your application is on it’s way",
+		"youWillGetAnEmaiTextText": "You will get an email from the bank within 3 days. Please make sure you have the copies of these documents ready",
+		"dNumberAcceptanceTextText": "D number acceptance",
+		"workContractTextText": "Work contract"
+	}
+}
