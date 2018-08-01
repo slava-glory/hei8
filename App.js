@@ -8,12 +8,15 @@
 
 import React from "react"
 import { createStackNavigator } from "react-navigation"
-import Menu from "./App/Menu/Menu"
-import Form from "./App/Form/Form"
-import Finish from "./App/Finish/Finish"
 import { Font } from "expo"
 import I18n from "i18n-js"
 import { DangerZone } from "expo"
+import * as firebase from "firebase"
+
+import Menu from "./App/Menu/Menu"
+import Form from "./App/Form/Form"
+import Finish from "./App/Finish/Finish"
+import { firebaseConfig2 } from "./App/constants"
 
 const PushRouteOne = createStackNavigator({
 	Form: {
@@ -72,7 +75,9 @@ export default class App extends React.Component {
 	componentDidMount() {
 
 		this.initProjectFonts()
-		this.initLocale()
+    this.initLocale()
+    
+    firebase.initializeApp(firebaseConfig2);
 		
 		// If you need to load data from a remote endpoint, this is a good place to instantiate the network request.
 	}

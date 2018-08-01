@@ -35,7 +35,7 @@ export default class Menu extends React.Component {
 	}
 
 	onButtonMobilePressed = () => {
-
+    console.log('onButtonMobilePressed');
 	}
 
 	componentDidMount() {

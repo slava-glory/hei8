@@ -14,7 +14,9 @@
 		"taxnumberTextInputText": "Tax Number",
 		"familynameTextInputText": "Family Name",
 		"firstnameTextInputText": "First Name",
-		"buttonNextButtonText": "Next"
+    "buttonNextButtonText": "Next",
+    "emptyFieldsError": "You must fill all fields",
+    "insertDatabaseError": "Error while adding in database. Please, try again."
 	},
 	"Finish": {
 		"buttonFinishButtonText": "Finish",

@@ -7,27 +7,19 @@
 //
 
 import React from "react"
-import { StyleSheet } from "react-native"
-import { View, ScrollView, Image, Text, TextInput, TouchableOpacity } from "react-native"
+import * as firebase from "firebase"
+import {
+  View,
+  ScrollView,
+  Image,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity
+} from "react-native"
+
+import { isEmtyFields } from "./../utils"
 import { strings } from "./../Locales/i18n"
-
-import * as firebase from 'firebase';
-
-// Initialize Firebase
-const firebaseConfig = {
-  // ADD YOUR FIREBASE CREDENTIALS
-  apiKey: "AIzaSyAD6GA88buB1A_br1HTLQhHGqtenxbpXfo",
-  authDomain: "eng-particle-207822.firebaseapp.com",
-  databaseURL: "https://eng-particle-207822.firebaseio.com",
-  projectId: "eng-particle-207822",
-  storageBucket: "eng-particle-207822.appspot.com",
-  messagingSenderId: "788175252477"
-};
-
-firebase.initializeApp(firebaseConfig);
-
-
-
 
 export default class Form extends React.Component {
 
@@ -41,22 +33,76 @@ export default class Form extends React.Component {
 	}
 
 	constructor(props) {
-		super(props)
+    super(props)
+    this.state = {
+      fields: {
+        firstName: '',
+        familyName: '',
+        taxNumber: '',
+        phoneNumber: '',
+        email: '',
+        address: '',
+        postcode: '',
+        city: '',
+      },
+      error: '',
+    }
 	}
 
 
 	onButtonNextPressed = () => {
-		const { navigate } = this.props.navigation
-		navigate("Finish", {})
-	}
+    const { navigate } = this.props.navigation
+    const { state } = this
+    const { fields } = state
+    console.log(this.state);
+
+    if(!isEmtyFields(fields)) {
+      console.log(fields);
+      firebase.database().ref('users').push({ ...fields })
+        .then(() => {
+          navigate("Finish", {})
+        })
+        .catch(() => {
+          this.setState({error: strings("Form.insertDatabaseError")});
+        })
+    } else {
+      this.setState({error: strings("Form.emptyFieldsError")});
+    }
+  }
+  
+  onButtonBackPressed = () => {
+    const { goBack } = this.props.navigation
+		goBack()
+  }
 
 	componentDidMount() {
 
 		// Additional component initialization can go here.
-		// If you need to load data from a remote endpoint, this is a good place to instantiate the network request.
-	}
+    // If you need to load data from a remote endpoint, this is a good place to instantiate the network request.
+  }
 
-	
+  _onTextInputChange = (text, field) => {
+    const { error } = this.state;
+    console.log('_onTextInputChange', text, field)
+
+    if (error) {
+      this.setState({error: ''})
+    }
+
+    this.setState({fields: {...this.state.fields, [`${field}`]: text}})
+    console.log(this.state);
+  } 
+
+  _renderError = () => {
+    const { error } = this.state;
+
+    return (
+      <View style={styles.errorMessage}>
+        <Text style={styles.errorMessageText}>{error}</Text>
+      </View>
+    )
+  }
+
 	render() {
 
 		return (
@@ -83,20 +129,53 @@ export default class Form extends React.Component {
 						pointerEvents="box-none" style={{
 							position: 'absolute',
 							paddingTop: 20,
-							marginTop: 0
+							marginTop: 40
 						}}>
 						
-					<TextInput placeholder={strings("Form.firstnameTextInputText")} style={styles.firstnameTextInput} />
-					<TextInput placeholder={strings("Form.familynameTextInputText")} style={styles.familynameTextInput} />		
-					<TextInput placeholder={strings("Form.taxnumberTextInputText")} style={styles.taxnumberTextInput} />
-					<TextInput placeholder={strings("Form.phonenumberTextInputText")} style={styles.phonenumberTextInput} />
-					<TextInput placeholder={strings("Form.emailTextInputText")} style={styles.emailTextInput} />
-					<TextInput placeholder={strings("Form.addressTextInputText")} style={styles.addressTextInput} />
-					<TextInput placeholder={strings("Form.postcodeTextInputText")} style={styles.postcodeTextInput} />
-					<TextInput placeholder={strings("Form.cityTextInputText")} style={styles.cityTextInput} />
-					<TouchableOpacity onPress={this.onButtonNextPressed} style={styles.buttonNextButtonTouchable}>
-						<Text style={styles.buttonNextButton}>{strings("Form.buttonNextButtonText")}</Text>
-					</TouchableOpacity>
+            <TextInput
+              onChangeText={(text) => this._onTextInputChange(text, 'firstName')}
+              placeholder={strings("Form.firstnameTextInputText")}
+              style={styles.textInputStyles}
+            />
+            <TextInput
+              onChangeText={(text) => this._onTextInputChange(text, 'familyName')}
+              placeholder={strings("Form.familynameTextInputText")}
+              style={styles.textInputStyles}
+            />		
+            <TextInput
+              onChangeText={(text) => this._onTextInputChange(text, 'taxNumber')}
+              placeholder={strings("Form.taxnumberTextInputText")}
+              style={styles.textInputStyles}
+            />
+            <TextInput
+              onChangeText={(text) => this._onTextInputChange(text, 'phoneNumber')}
+              placeholder={strings("Form.phonenumberTextInputText")}
+              style={styles.textInputStyles}
+            />
+            <TextInput
+              onChangeText={(text) => this._onTextInputChange(text, 'email')}
+              placeholder={strings("Form.emailTextInputText")}
+              style={styles.textInputStyles}
+            />
+            <TextInput
+              onChangeText={(text) => this._onTextInputChange(text, 'address')}
+              placeholder={strings("Form.addressTextInputText")}
+              style={styles.textInputStyles}
+            />
+            <TextInput
+              onChangeText={(text) => this._onTextInputChange(text, 'postcode')}
+              placeholder={strings("Form.postcodeTextInputText")}
+              style={styles.textInputStyles}
+            />
+            <TextInput
+              onChangeText={(text) => this._onTextInputChange(text, 'city')}
+              placeholder={strings("Form.cityTextInputText")}
+              style={styles.textInputStyles}
+            />
+            {this._renderError()}
+            <TouchableOpacity onPress={this.onButtonNextPressed} style={styles.buttonNextButtonTouchable}>
+              <Text style={styles.buttonNextButton}>{strings("Form.buttonNextButtonText")}</Text>
+            </TouchableOpacity>
 					</ScrollView>
 				</View>
 			</View>
@@ -110,7 +189,11 @@ const styles = StyleSheet.create({
 		flex: 1
 	},
 	buttonBackButton: {
-	},
+  },
+  errorMessageText: {
+    color: "red",
+    textAlign: "center",
+  },
 	buttonBackButtonTouchable: {
 		backgroundColor: "rgba(0, 0, 0, 0)",
 		width: 15.00,
@@ -141,98 +224,7 @@ const styles = StyleSheet.create({
 		marginTop: 10.00,
 		marginRight: 10.00
 	},
-	firstnameTextInput: {
-		color: "rgba(0, 0, 0, 1)",
-		fontFamily: "SFProText-Regular",
-		fontSize: 14.00,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-		letterSpacing: 0.00,
-		backgroundColor: "rgba(0, 0, 0, 0)",
-		alignSelf: "stretch",
-		height: 48.00,
-		marginTop: 40.00	
-	},
-	familynameTextInput: {
-		color: "rgba(119, 139, 153, 1)",
-		fontFamily: "SFProText-Regular",
-		fontSize: 14.00,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-		letterSpacing: 0.00,
-		backgroundColor: "rgba(0, 0, 0, 0)",
-		alignSelf: "stretch",
-		height: 48.00,
-		marginTop: 10.00
-	},
-	taxnumberTextInput: {
-		color: "rgba(119, 139, 153, 1)",
-		fontFamily: "SFProText-Regular",
-		fontSize: 14.00,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-		letterSpacing: 0.00,
-		backgroundColor: "rgba(0, 0, 0, 0)",
-		alignSelf: "stretch",
-		height: 48.00,
-		marginTop: 10.00
-	},
-	phonenumberTextInput: {
-		color: "rgba(119, 139, 153, 1)",
-		fontFamily: "SFProText-Regular",
-		fontSize: 14.00,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-		letterSpacing: 0.00,
-		backgroundColor: "rgba(0, 0, 0, 0)",
-		alignSelf: "stretch",
-		height: 48.00,
-		marginTop: 10.00
-	},
-	emailTextInput: {
-		color: "rgba(119, 139, 153, 1)",
-		fontFamily: "SFProText-Regular",
-		fontSize: 14.00,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-		letterSpacing: 0.00,
-		backgroundColor: "rgba(0, 0, 0, 0)",
-		alignSelf: "stretch",
-		height: 48.00,
-		marginTop: 10.00
-	},
-	addressTextInput: {
-		color: "rgba(119, 139, 153, 1)",
-		fontFamily: "SFProText-Regular",
-		fontSize: 14.00,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-		letterSpacing: 0.00,
-		backgroundColor: "rgba(0, 0, 0, 0)",
-		alignSelf: "stretch",
-		height: 48.00,
-		marginTop: 10.00
-	},
-	postcodeTextInput: {
-		color: "rgba(119, 139, 153, 1)",
-		fontFamily: "SFProText-Regular",
-		fontSize: 14.00,
-		fontStyle: "normal",
-		fontWeight: "normal",
-		textAlign: "left",
-		letterSpacing: 0.00,
-		backgroundColor: "rgba(0, 0, 0, 0)",
-		alignSelf: "stretch",
-		height: 48.00,
-		marginTop: 10.00
-	},
-	cityTextInput: {
+	textInputStyles: {
 		color: "rgba(119, 139, 153, 1)",
 		fontFamily: "SFProText-Regular",
 		fontSize: 14.00,
