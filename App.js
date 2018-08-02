@@ -16,7 +16,7 @@ import * as firebase from "firebase"
 import Menu from "./App/Menu/Menu"
 import Form from "./App/Form/Form"
 import Finish from "./App/Finish/Finish"
-import { firebaseConfig2 } from "./App/constants"
+import { firebaseConfig } from "./App/constants"
 
 const PushRouteOne = createStackNavigator({
 	Form: {
@@ -77,7 +77,7 @@ export default class App extends React.Component {
 		this.initProjectFonts()
     this.initLocale()
     
-    firebase.initializeApp(firebaseConfig2);
+    firebase.initializeApp(firebaseConfig);
 		
 		// If you need to load data from a remote endpoint, this is a good place to instantiate the network request.
 	}

@@ -8,11 +8,3 @@ export const firebaseConfig = {
   storageBucket: "eng-particle-207822.appspot.com",
   messagingSenderId: "788175252477"
 };
-export const firebaseConfig2 = {
-  apiKey: "AIzaSyBLwpgbiP8fYknnQpshj--asvwk8Pi3pwM",
-  authDomain: "test-app-3fa59.firebaseapp.com",
-  databaseURL: "https://test-app-3fa59.firebaseio.com",
-  projectId: "test-app-3fa59",
-  storageBucket: "test-app-3fa59.appspot.com",
-  messagingSenderId: "58116575320"
-}
