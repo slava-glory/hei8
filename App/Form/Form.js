@@ -54,10 +54,8 @@ export default class Form extends React.Component {
     const { navigate } = this.props.navigation
     const { state } = this
     const { fields } = state
-    console.log(this.state);
 
     if(!isEmtyFields(fields)) {
-      console.log(fields);
       firebase.database().ref('users').push({ ...fields })
         .then(() => {
           navigate("Finish", {})
@@ -83,14 +81,12 @@ export default class Form extends React.Component {
 
   _onTextInputChange = (text, field) => {
     const { error } = this.state;
-    console.log('_onTextInputChange', text, field)
 
     if (error) {
       this.setState({error: ''})
     }
 
     this.setState({fields: {...this.state.fields, [`${field}`]: text}})
-    console.log(this.state);
   } 
 
   _renderError = () => {
@@ -111,74 +107,60 @@ export default class Form extends React.Component {
 					<Image style={styles.buttonBackButton} source={require("./../../Assets/images/button-back.png")} />
 				</TouchableOpacity>
 				
-					<View style={styles.formListView}>
-					<Text style={styles.titleText}>{strings("Form.titleTextText")}</Text>
+        <Text style={styles.titleText}>{strings("Form.titleTextText")}</Text>
 
-					<View pointerEvents="box-none" style={{
-						flexDirection: "row",
-						alignSelf: "stretch"
-					}} />
-					<View pointerEvents="box-none" style={{
-						flexDirection: "row",
-						alignSelf: "stretch"
-					}} />
-					<ScrollView 
-						showsVerticalScrollIndicator={false}
-						vertical={true}
-						snapToAlignment="end"
-						pointerEvents="box-none" style={{
-							position: 'absolute',
-							paddingTop: 20,
-							marginTop: 40
-						}}>
-						
-            <TextInput
-              onChangeText={(text) => this._onTextInputChange(text, 'firstName')}
-              placeholder={strings("Form.firstnameTextInputText")}
-              style={styles.textInputStyles}
-            />
-            <TextInput
-              onChangeText={(text) => this._onTextInputChange(text, 'familyName')}
-              placeholder={strings("Form.familynameTextInputText")}
-              style={styles.textInputStyles}
-            />		
-            <TextInput
-              onChangeText={(text) => this._onTextInputChange(text, 'taxNumber')}
-              placeholder={strings("Form.taxnumberTextInputText")}
-              style={styles.textInputStyles}
-            />
-            <TextInput
-              onChangeText={(text) => this._onTextInputChange(text, 'phoneNumber')}
-              placeholder={strings("Form.phonenumberTextInputText")}
-              style={styles.textInputStyles}
-            />
-            <TextInput
-              onChangeText={(text) => this._onTextInputChange(text, 'email')}
-              placeholder={strings("Form.emailTextInputText")}
-              style={styles.textInputStyles}
-            />
-            <TextInput
-              onChangeText={(text) => this._onTextInputChange(text, 'address')}
-              placeholder={strings("Form.addressTextInputText")}
-              style={styles.textInputStyles}
-            />
-            <TextInput
-              onChangeText={(text) => this._onTextInputChange(text, 'postcode')}
-              placeholder={strings("Form.postcodeTextInputText")}
-              style={styles.textInputStyles}
-            />
-            <TextInput
-              onChangeText={(text) => this._onTextInputChange(text, 'city')}
-              placeholder={strings("Form.cityTextInputText")}
-              style={styles.textInputStyles}
-            />
-            {this._renderError()}
-            <TouchableOpacity onPress={this.onButtonNextPressed} style={styles.buttonNextButtonTouchable}>
-              <Text style={styles.buttonNextButton}>{strings("Form.buttonNextButtonText")}</Text>
-            </TouchableOpacity>
-					</ScrollView>
-				</View>
-			</View>
+        <ScrollView 
+          showsVerticalScrollIndicator={false}
+          vertical={true}
+          snapToAlignment="end"
+        >
+          
+          <TextInput
+            onChangeText={(text) => this._onTextInputChange(text, 'firstName')}
+            placeholder={strings("Form.firstnameTextInputText")}
+            style={styles.textInputStyles}
+          />
+          <TextInput
+            onChangeText={(text) => this._onTextInputChange(text, 'familyName')}
+            placeholder={strings("Form.familynameTextInputText")}
+            style={styles.textInputStyles}
+          />		
+          <TextInput
+            onChangeText={(text) => this._onTextInputChange(text, 'taxNumber')}
+            placeholder={strings("Form.taxnumberTextInputText")}
+            style={styles.textInputStyles}
+          />
+          <TextInput
+            onChangeText={(text) => this._onTextInputChange(text, 'phoneNumber')}
+            placeholder={strings("Form.phonenumberTextInputText")}
+            style={styles.textInputStyles}
+          />
+          <TextInput
+            onChangeText={(text) => this._onTextInputChange(text, 'email')}
+            placeholder={strings("Form.emailTextInputText")}
+            style={styles.textInputStyles}
+          />
+          <TextInput
+            onChangeText={(text) => this._onTextInputChange(text, 'address')}
+            placeholder={strings("Form.addressTextInputText")}
+            style={styles.textInputStyles}
+          />
+          <TextInput
+            onChangeText={(text) => this._onTextInputChange(text, 'postcode')}
+            placeholder={strings("Form.postcodeTextInputText")}
+            style={styles.textInputStyles}
+          />
+          <TextInput
+            onChangeText={(text) => this._onTextInputChange(text, 'city')}
+            placeholder={strings("Form.cityTextInputText")}
+            style={styles.textInputStyles}
+          />
+          {this._renderError()}
+          <TouchableOpacity onPress={this.onButtonNextPressed} style={styles.buttonNextButtonTouchable}>
+            <Text style={styles.buttonNextButton}>{strings("Form.buttonNextButtonText")}</Text>
+          </TouchableOpacity>
+        </ScrollView>
+      </View>
 		)
 	}
 }
@@ -186,7 +168,9 @@ export default class Form extends React.Component {
 const styles = StyleSheet.create({
 	formView: {
 		backgroundColor: "rgba(255, 255, 255, 1)",
-		flex: 1
+    flex: 1,
+    paddingLeft: 13,
+    paddingRight: 17,
 	},
 	buttonBackButton: {
   },
@@ -202,14 +186,6 @@ const styles = StyleSheet.create({
 		marginTop: 40.00,
 		justifyContent: "center"
 	},
-	formListView: {
-		backgroundColor: "rgba(0, 0, 0, 0)",
-		alignSelf: "stretch",
-		height: 1000,
-		marginLeft: 13.00,
-		marginTop: 35.00,
-		marginRight: 17.00
-	},
 	titleText: {
 		color: "rgba(0, 0, 0, 1)",
 		fontFamily: "SFProText-Semibold",
@@ -221,7 +197,8 @@ const styles = StyleSheet.create({
 		backgroundColor: "rgba(0, 0, 0, 0)",
 		alignSelf: "stretch",
 		marginLeft: 10.00,
-		marginTop: 10.00,
+		marginTop: 45.00,
+		marginBottom: 10.00,
 		marginRight: 10.00
 	},
 	textInputStyles: {
@@ -266,6 +243,7 @@ const styles = StyleSheet.create({
 		width: 312.00,
 		height: 48.00,
 		marginTop: 30.00,
+		marginBottom: 30.00,
 		justifyContent: "center"
 	}
 })
